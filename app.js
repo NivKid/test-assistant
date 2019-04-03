@@ -1,20 +1,19 @@
-    
 "use strict";
 
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const app = express();
+const restService = express();
 
-app.use(
+restService.use(
   bodyParser.urlencoded({
     extended: true
   })
 );
 
-app.use(bodyParser.json());
+restService.use(bodyParser.json());
 
-app.post("/echo", function(req, res) {
+restService.post("/echo", function(req, res) {
   var speech =
     req.body.result &&
     req.body.result.parameters &&
@@ -24,11 +23,11 @@ app.post("/echo", function(req, res) {
   return res.json({
     speech: speech,
     displayText: speech,
-    source: "test-assistant"
+    source: "webhook-echo-sample"
   });
 });
 
-app.post("/audio", function(req, res) {
+restService.post("/audio", function(req, res) {
   var speech = "";
   switch (req.body.result.parameters.AudioSample.toLowerCase()) {
     //Speech Synthesis Markup Language 
@@ -117,21 +116,21 @@ app.post("/audio", function(req, res) {
   return res.json({
     speech: speech,
     displayText: speech,
-    source: "test-assistant"
+    source: "webhook-echo-sample"
   });
 });
 
-app.post("/video", function(req, res) {
+restService.post("/video", function(req, res) {
   return res.json({
     speech:
       '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
     displayText:
       '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
-    source: "test-assistant"
+    source: "webhook-echo-sample"
   });
 });
 
-app.post("/slack-test", function(req, res) {
+restService.post("/slack-test", function(req, res) {
   var slack_message = {
     text: "Details of JIRA board for Browse and Commerce",
     attachments: [
@@ -189,13 +188,13 @@ app.post("/slack-test", function(req, res) {
   return res.json({
     speech: "speech",
     displayText: "speech",
-    source: "test-assistant",
+    source: "webhook-echo-sample",
     data: {
       slack: slack_message
     }
   });
 });
 
-app.listen(process.env.PORT || 8000, function() {
+restService.listen(process.env.PORT || 8000, function() {
   console.log("Server up and listening");
 });
